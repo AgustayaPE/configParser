@@ -1,0 +1,10 @@
+digraph "com.configparser:configparser:jar:1" { 
+	"com.configparser:configparser:jar:1" -> "junit:junit:jar:4.11:test" ; 
+	"com.configparser:configparser:jar:1" -> "com.opencsv:opencsv:jar:4.0:compile" ; 
+	"junit:junit:jar:4.11:test" -> "org.hamcrest:hamcrest-core:jar:1.3:test" ; 
+	"com.opencsv:opencsv:jar:4.0:compile" -> "org.apache.commons:commons-lang3:jar:3.6:compile" ; 
+	"com.opencsv:opencsv:jar:4.0:compile" -> "org.apache.commons:commons-text:jar:1.1:compile" ; 
+	"com.opencsv:opencsv:jar:4.0:compile" -> "commons-beanutils:commons-beanutils:jar:1.9.3:compile" ; 
+	"commons-beanutils:commons-beanutils:jar:1.9.3:compile" -> "commons-logging:commons-logging:jar:1.2:compile" ; 
+	"commons-beanutils:commons-beanutils:jar:1.9.3:compile" -> "commons-collections:commons-collections:jar:3.2.2:compile" ; 
+ } 
