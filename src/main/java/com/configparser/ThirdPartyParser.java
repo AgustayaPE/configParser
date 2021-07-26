@@ -8,11 +8,12 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 class ThirdPartyParser implements Parser {
+
+    private boolean flag;
 
     @Override
     public String getFileName() {
@@ -21,28 +22,16 @@ class ThirdPartyParser implements Parser {
     }
 
     @Override
-    public Iterator<CSVUser> readCSVFile(String SAMPLE_CSV_FILE_PATH) throws IOException {
-        Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
-        CsvToBean<CSVUser> csvToBean = new CsvToBeanBuilder(reader).withType(CSVUser.class).withIgnoreLeadingWhiteSpace(true).build();
-
-        Iterator<CSVUser> csvUserIterator = csvToBean.iterator();
-
-        return csvUserIterator;
-
-    }
-
-    @Override
-    public boolean validateCSVFile(Iterator<CSVUser> csvUserIterator) {
-        int flag=0;
-        while(csvUserIterator.hasNext()) {
-            CSVUser csvUser = csvUserIterator.next();
-            if(csvUser.getName()==null || csvUser.getEmail()==null || csvUser.getPhoneNo()==null || csvUser.getCountry()==null) {
-                System.out.println("Data inconsistent");
-                flag = 1;
-            } 
-
+    public boolean readCSVFile(String SAMPLE_CSV_FILE_PATH) {
+        Reader reader;
+        try {
+            reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
         }
-        if(flag==0)
+        if(reader!=null)
         return true;
         else
         return false;
@@ -50,7 +39,40 @@ class ThirdPartyParser implements Parser {
     }
 
     @Override
-    public void processCSVFile(Iterator<CSVUser> csvUserIterator) {
+    public boolean validateCSVFile(String SAMPLE_CSV_FILE_PATH) throws FileNotFoundException{
+        try {
+            Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
+        
+        CsvToBean<CSVUser> csvToBean = new CsvToBeanBuilder(reader).withType(CSVUser.class).withIgnoreLeadingWhiteSpace(true).build();
+        Iterator<CSVUser> csvUserIterator = csvToBean.iterator();
+        while(csvUserIterator.hasNext()) {
+            CSVUser csvUser = csvUserIterator.next();
+            if(csvUser.getName()==null || csvUser.getEmail()==null || csvUser.getPhoneNo()==null || csvUser.getCountry()==null) {
+                System.out.println("Data inconsistent");
+                flag = false;
+            } 
+
+        }
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        flag = false;
+    }
+    if(flag==true)
+    return true;
+    else
+    return false;
+
+    }
+
+    @Override
+    public void processCSVFile(String SAMPLE_CSV_FILE_PATH) throws FileNotFoundException {
+        Reader reader;
+        try {
+            reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
+        
+        CsvToBean<CSVUser> csvToBean = new CsvToBeanBuilder(reader).withType(CSVUser.class).withIgnoreLeadingWhiteSpace(true).build();
+        Iterator<CSVUser> csvUserIterator = csvToBean.iterator();
         while (csvUserIterator.hasNext()) {
             CSVUser csvUser = csvUserIterator.next();
             System.out.println("Name : " + csvUser.getName());
@@ -59,29 +81,18 @@ class ThirdPartyParser implements Parser {
             System.out.println("Country : " + csvUser.getCountry());
             System.out.println("-----------------------------------");
         }
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
 
         
 
     }
+
 
     
 
-    @Override
-    public Scanner readCSVFilee(String SAMPLE_CSV_FILE_PATH) throws FileNotFoundException {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
-    @Override
-    public boolean validateCSVFile(Scanner scanner) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void processCSVFile(Scanner scanner) {
-        // TODO Auto-generated method stub
-        
-    }
 
 }
